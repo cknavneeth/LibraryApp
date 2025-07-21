@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "buildCommand": "npm run build -- --configuration=production",
+  "buildCommand": "ng build --configuration=production",
   "outputDirectory": "dist/frontend",
   "rewrites": [
     {
@@ -9,3 +9,4 @@
     }
   ]
 }
+
