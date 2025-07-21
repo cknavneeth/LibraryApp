@@ -1,0 +1,55 @@
+<div class="container mx-auto p-6">
+  <h2 class="text-3xl font-bold text-gray-800 mb-8 text-center">Your Borrowed Books</h2>
+
+  <div *ngIf="borrowedBooks.length === 0 && !isLoading" class="text-center text-gray-600 text-lg py-10">
+    <p>You haven't borrowed any books yet.</p>
+    <p class="mt-4">Explore our <a routerLink="/books" class="text-blue-600 hover:underline">available books</a>!</p>
+  </div>
+
+  <div *ngIf="isLoading" class="text-center text-gray-600 text-lg py-10">
+    Loading borrowed books...
+  </div>
+
+ 
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+    <div
+      *ngFor="let book of borrowedBooks"
+      class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300"
+    >
+      <img
+        [src]="book.coverUrl || 'https://via.placeholder.com/250x350?text=No+Cover'"
+        [alt]="book.title"
+        class="w-full h-64 object-cover"
+      />
+
+      <div class="p-4">
+        <h3 class="text-lg font-semibold mb-2 text-gray-900">{{ book.title }}</h3>
+        <p class="text-sm text-gray-700"><strong>Author:</strong> {{ book.author }}</p>
+        <p class="text-sm text-gray-700"><strong>Genre:</strong> {{ book.genre }}</p>
+        <p class="text-sm text-gray-700"><strong>Publication Year:</strong> {{ book.publicationYear }}</p>
+
+
+         <button
+    (click)="returnBook(book._id!)"
+    class="mt-4 px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg text-sm"
+  >
+    Return
+  </button>
+
+
+  <button
+  *ngIf="book.pdfUrl"
+  (click)="openPdfModal(book.pdfUrl)"
+  class="mt-2 ml-2 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg text-sm"
+>
+  Read
+</button>
+
+        </div>
+    </div>
+
+    
+
+  </div>
+</div>

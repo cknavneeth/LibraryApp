@@ -1,0 +1,15 @@
+<div class="flex flex-col h-screen">
+  <!-- Fixed Admin Header -->
+  <app-admin-header *ngIf="showLayout" class="fixed top-0 left-0 w-full z-50 h-16"></app-admin-header>
+
+  <!-- Main Content Area (starts below fixed header) -->
+  <div class="flex flex-1 pt-16"> <!-- pt-16 = padding-top: 64px -->
+    <!-- Sidebar -->
+    <app-admin-sidebar *ngIf="showLayout"  class="w-64"></app-admin-sidebar>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 p-6 ml-4 bg-gray-50 overflow-auto rounded-lg shadow-sm">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>

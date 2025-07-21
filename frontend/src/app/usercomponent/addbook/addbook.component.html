@@ -1,0 +1,108 @@
+<form [formGroup]="BookForm" (ngSubmit)="onSubmit()" class="max-w-3xl mx-auto p-6 bg-white rounded-xl shadow-md space-y-6">
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div>
+      <label class="block mb-1 text-sm font-medium">Title</label>
+      <input type="text" formControlName="title" class="w-full border p-2 rounded-md" />
+       <div class="text-red-600 text-sm" *ngIf="BookForm.get('title')?.touched && BookForm.get('title')?.invalid">
+    Title is required.
+  </div>
+    </div>
+
+    <div>
+      <label class="block mb-1 text-sm font-medium">Author</label>
+      <input type="text" formControlName="author" class="w-full border p-2 rounded-md" />
+          <div class="text-red-600 text-sm" *ngIf="BookForm.get('author')?.touched && BookForm.get('author')?.invalid">
+    Title is required.
+  </div>
+    </div>
+
+    <div>
+      <label class="block mb-1 text-sm font-medium">Publisher</label>
+      <input type="text" formControlName="publisher" class="w-full border p-2 rounded-md" />
+       <div class="text-red-600 text-sm" *ngIf="BookForm.get('publisher')?.touched && BookForm.get('publisher')?.invalid">
+    Title is required.
+  </div>
+    </div>
+
+    <div>
+      <label class="block mb-1 text-sm font-medium">Publication Year</label>
+      <input type="text" formControlName="publicationYear" class="w-full border p-2 rounded-md" />
+       <div class="text-red-600 text-sm" *ngIf="BookForm.get('publicationYear')?.touched && BookForm.get('publicationYear')?.invalid">
+    Title is required.
+  </div>
+  <small *ngIf="BookForm.get('publicationYear')?.hasError('pattern')">Publication year must be a valid 4-digit number.</small>
+    </div>
+
+    <div>
+      <label class="block mb-1 text-sm font-medium">Edition</label>
+      <input type="text" formControlName="edition" class="w-full border p-2 rounded-md" />
+       <div class="text-red-600 text-sm" *ngIf="BookForm.get('edition')?.touched && BookForm.get('edition')?.invalid">
+    Title is required.
+  </div>
+    </div>
+
+    <div>
+      <label class="block mb-1 text-sm font-medium">Language</label>
+      <input type="text" formControlName="language" class="w-full border p-2 rounded-md" />
+       <div class="text-red-600 text-sm" *ngIf="BookForm.get('language')?.touched && BookForm.get('language')?.invalid">
+    Title is required.
+  </div>
+    </div>
+
+    <div>
+      <label class="block mb-1 text-sm font-medium">Genre</label>
+      <input type="text" formControlName="genre" class="w-full border p-2 rounded-md" />
+       <div class="text-red-600 text-sm" *ngIf="BookForm.get('genre')?.touched && BookForm.get('genre')?.invalid">
+    Title is required.
+  </div>
+    </div>
+
+    <div>
+      <label class="block mb-1 text-sm font-medium">Description</label>
+      <input type="text" formControlName="description" class="w-full border p-2 rounded-md" />
+       <div class="text-red-600 text-sm" *ngIf="BookForm.get('description')?.touched && BookForm.get('description')?.invalid">
+    Title is required.
+  </div>
+    </div>
+
+    <div>
+      <label class="block mb-1 text-sm font-medium">Total Copies</label>
+      <input type="text" formControlName="totalCopies" class="w-full border p-2 rounded-md" />
+       <div class="text-red-600 text-sm" *ngIf="BookForm.get('totalCopies')?.touched && BookForm.get('totalCopies')?.invalid">
+    Title is required.
+  </div>
+  <small *ngIf="BookForm.get('totalCopies')?.hasError('pattern')">Total copies must be a valid  number.</small>
+    </div>
+
+    <div>
+      <label class="block mb-1 text-sm font-medium">Available Copies</label>
+      <input type="text" formControlName="availableCopies" class="w-full border p-2 rounded-md" />
+       <div class="text-red-600 text-sm" *ngIf="BookForm.get('availableCopies')?.touched && BookForm.get('availableCopies')?.invalid">
+    Title is required.
+  </div>
+  <small *ngIf="BookForm.get('availableCopies')?.hasError('pattern')">available must be a valid number.</small>
+    </div>
+
+    <div>
+      <label class="block mb-1 text-sm font-medium">Cover Photo</label>
+      <input type="file" (change)="onFileSelect($event, 'cover')" class="w-full border p-2 rounded-md" />
+       <div class="text-red-600 text-sm" *ngIf="BookForm.get('cover')?.touched && BookForm.get('cover')?.invalid">
+    Title is required.
+  </div>
+    </div>
+
+    <div>
+      <label class="block mb-1 text-sm font-medium">PDF</label>
+      <input type="file" (change)="onFileSelect($event, 'pdf')" class="w-full border p-2 rounded-md" />
+    </div>
+  </div>
+
+  <div  class="text-center">
+    <button *ngIf="isEditMode==false" type="submit" [disabled]="BookForm.invalid" class="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition duration-200">
+      Add Your Book
+    </button>
+    <button *ngIf="isEditMode==true" type="submit" [disabled]="BookForm.invalid" class="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition duration-200">
+      Edit Your Book
+    </button>
+  </div>
+</form>
