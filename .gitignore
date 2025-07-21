@@ -1,0 +1,9 @@
+# Ignore node_modules folders everywhere
+**/node_modules/
+
+# Ignore dist folders everywhere
+**/dist/
+
+# Ignore all .env files in any folder (root, backend, frontend, etc.)
+**/.env
+
