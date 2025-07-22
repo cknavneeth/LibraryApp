@@ -234,7 +234,7 @@ export class UserRepositoryService implements IRegisterRepository{
             const skip=(page-1)*limit
 
             const [users,total]=await Promise.all([
-                await this._userModel.find()
+                await this._userModel.find({role:'user'})
                 .skip(skip)
                 .limit(limit)
                 .populate('borrowedBooks')
