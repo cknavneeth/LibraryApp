@@ -34,6 +34,9 @@ import {Logger} from '@nestjs/common'
     }
     Logger.log(`[AppModule] Loading JWT_ACCESS_EXPIRES_IN. Value found: ${expiresIn}`);
 
+   
+
+
     return {
       secret: secret,
       signOptions: { expiresIn: expiresIn }
