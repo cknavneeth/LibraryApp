@@ -3,63 +3,69 @@ import { AuthService } from '../../services/userService/authService/auth.service
 import { inject, Inject } from '@angular/core';
 import { catchError, filter, Observable, switchMap, take, throwError } from 'rxjs';
 
-export const authinterceptorInterceptor: HttpInterceptorFn = (req:HttpRequest<any>, next:HttpHandlerFn):Observable<HttpEvent<any>> => {
+export const authinterceptorInterceptor: HttpInterceptorFn = (req: HttpRequest<any>, next: HttpHandlerFn): Observable<HttpEvent<any>> => {
+  const authService = inject(AuthService);
 
-  const authService=inject(AuthService)
- 
-  let modifiedReq=req.clone({
-    withCredentials:true
-  })
+  const token = localStorage.getItem('access_token');
+
+  let modifiedReq = req.clone({
+    withCredentials: true,
+    setHeaders: {
+      Authorization: `Bearer ${token}`
+    }
+  });
 
   return next(modifiedReq).pipe(
+    catchError((error: HttpErrorResponse) => {
+      if (error.status === 401 && !req.url.includes('/refresh')) {
+        if (!authService.isRefreshing) {
+          authService.isRefreshing = true;
 
-      catchError((error:HttpErrorResponse)=>{
+          return authService.refreshToken().pipe(
+            switchMap(() => {
+              authService.isRefreshing = false;
+              authService.refreshSubject.next(true);
 
-         if(error.status==401&&!req.url.includes('/refresh')){
-            if(!authService.isRefreshing){
-                return authService.refreshToken().pipe(
-                  switchMap(()=>{
-                     authService.isRefreshing=true
-                     authService.refreshSubject.next(true)
+              const newToken = localStorage.getItem('access_token');
 
-                     modifiedReq=req.clone({
-                      withCredentials:true
-                     })
+              const retryReq = req.clone({
+                withCredentials: true,
+                setHeaders: {
+                  Authorization: `Bearer ${newToken}`
+                }
+              });
 
-                     return next(modifiedReq)
-                  }),
-                   catchError((error:HttpErrorResponse)=>{
-                        authService.isRefreshing=false
-                        authService.refreshSubject.next(false)
+              return next(retryReq);
+            }),
+            catchError((err: HttpErrorResponse) => {
+              authService.isRefreshing = false;
+              authService.refreshSubject.next(false);
 
-                        authService.logout()
-                        return throwError(()=>error)
-          
-                     })
+              authService.logout();
+              return throwError(() => err);
+            })
+          );
+        } else {
+          return authService.refreshSubject.pipe(
+            filter(status => status === true),
+            take(1),
+            switchMap(() => {
+              const newToken = localStorage.getItem('access_token');
 
-                )
-            }else{
-               return authService.refreshSubject.pipe(
-                  filter(token=>token==true),
-                  take(1),
-                  switchMap(()=>{
-                    modifiedReq=req.clone({withCredentials:true})
-                    return next(req)
-                  })
-                )
-            }
+              const retryReq = req.clone({
+                withCredentials: true,
+                setHeaders: {
+                  Authorization: `Bearer ${newToken}`
+                }
+              });
 
+              return next(retryReq);
+            })
+          );
+        }
+      }
 
-         }
-
-         return throwError(()=>error)
-
-      })
-
-  )
-
-
-
-
-
+      return throwError(() => error);
+    })
+  );
 };
